@@ -3,6 +3,7 @@ from app.api.websites import router as websites_router
 from app.api.metrics import router as metrics_router
 from app.api.alerts import router as alerts_router
 from app.api.dashboard import router as dashboard_router
+from app.api.health import router as health_router
 from app.db.base import Base
 from app.db.session import engine
 from app.models.check_result import CheckResult
@@ -16,6 +17,7 @@ app.include_router(websites_router)
 app.include_router(metrics_router)
 app.include_router(alerts_router)
 app.include_router(dashboard_router)
+app.include_router(health_router)
 
 @app.on_event("startup")
 def startup():
