@@ -4,20 +4,24 @@ from sqlalchemy.orm import Session
 from app.schemas.website import WebsiteCreate, WebsiteResponse
 from app.models.website import Website
 from app.db.deps import get_db
+from urllib.parse import urlparse
 
 
 router = APIRouter(prefix="/websites", tags=["Websites"])
+
 
 @router.post("/", response_model=WebsiteResponse)
 def create_website(payload: WebsiteCreate, db: Session = Depends(get_db)):
     website = Website(
         url=str(payload.url),
+        name=payload.name,
         check_interval=payload.check_interval
     )
     db.add(website)
     db.commit()
     db.refresh(website)
     return website
+
 
 @router.get("/", response_model=List[WebsiteResponse])
 def list_websites(
@@ -28,6 +32,24 @@ def list_websites(
     if active is not None:
         query = query.filter(Website.is_active == active)
     return query.all()
+
+@router.post("/bulk")
+def bulk_create_websites(
+    payload: list[WebsiteCreate],
+    db: Session = Depends(get_db)
+):
+    websites = [
+        Website(
+            url=str(site.url),
+            name=site.name,
+            check_interval=site.check_interval
+        )
+        for site in payload
+    ]
+
+    db.add_all(websites)
+    db.commit()
+    return {"created": len(websites)}
 
 
 @router.patch("/{website_id}", response_model=WebsiteResponse)

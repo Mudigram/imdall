@@ -2,6 +2,7 @@ from pydantic import BaseModel, HttpUrl
 
 class WebsiteCreate(BaseModel):
     url: HttpUrl
+    name: str
     check_interval: int = 60
 
 class WebsiteResponse(BaseModel):
