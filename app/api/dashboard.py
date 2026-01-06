@@ -9,7 +9,7 @@ from app.models.alert_event import AlertEvent
 
 router = APIRouter(prefix="/dashboard", tags=["Dashboard"])
 
-@router.get("/s", response_model=list[WebsiteDashboardItem])
+@router.get("s", response_model=list[WebsiteDashboardItem])
 def get_dashboard_websites(db: Session = Depends(get_db)):
     websites = db.query(Website).filter(Website.is_active == True).all()
     response = []
