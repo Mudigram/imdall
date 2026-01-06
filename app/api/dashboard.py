@@ -37,7 +37,7 @@ def get_dashboard_websites(db: Session = Depends(get_db)):
 
         if metrics.consecutive_failures >= 5:
             alert_state = "critical"
-        elif metrics.avg_response_time_ms and metrics.avg_response_time_ms > 2000:
+        elif metrics.avg_response_time and metrics.avg_response_time > 2000:
             alert_state = "warning"
 
         response.append(
